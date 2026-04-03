@@ -15,10 +15,16 @@
 			</form>
 
 			<div class="dropdown">
-				<button class="btn btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+				<button class="btn btn-sm dropdown-toggle d-flex align-items-center gap-2" type="button" id="dropdownMenuButton" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false">
-					<img class="profile-pic" src="{{ request.user.picture.url }}">
-					<!-- {{ request.user.get_full_name|truncatechars:15 }} -->
+					{% if request.user.picture %}
+					<img class="profile-pic" src="{{ request.user.picture.url }}" alt="{{ request.user.get_full_name }}">
+					{% else %}
+					<div class="avatar-professional avatar-{{ request.user.id|divisibleby:8|add:1 }}">
+						{{ request.user.get_full_name.0|upper }}
+					</div>
+					{% endif %}
+					<span class="d-none d-md-inline fw-semibold">{{ request.user.get_full_name|truncatechars:15 }}</span>
 				</button>
 				<div class="dropdown-menu" style="min-width: 14rem !important;" aria-labelledby="dropdownMenuButton">
 					<p class="container text-muted-xs text-center">

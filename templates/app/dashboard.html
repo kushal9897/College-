@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<div id="input-nav" class="p-2"><a href="/"> Home </a> Dashboard</div>
+<div id="input-nav" class="p-2 glass-card"><a href="/"> Home </a> <i class="fas fa-chevron-right mx-2"></i> Dashboard</div>
 
 {% if messages %}
 {% for message in messages %}
@@ -96,6 +96,14 @@
 		justify-content: space-between;
 		align-items: center;
 		background-color: #fff;
+		border-radius: 16px;
+		padding: 1.5rem;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+	
+	.users-count .card-count:hover {
+		transform: translateY(-8px) scale(1.02);
+		box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
 	}
 
 	.users-count .card-count h2 {
@@ -169,66 +177,95 @@
 </div>
 
 <div class="row users-count px-3">
-	<div class="col-md-3 mb-3 px-2">
-		<div class="card-count p-3">
-			<h3><i class="fas fa-users bg-light-aqua"></i></h3>
-			<div class="text-right">
-				Students
-				<h2>12,040</h2>
+	<div class="col-md-3 mb-4 px-2">
+		<div class="stat-card fade-in-up" style="animation-delay: 0.1s;">
+			<div class="stat-icon primary">
+				<i class="bi bi-people-fill"></i>
+			</div>
+			<div class="text-muted small fw-semibold text-uppercase mb-1">Total Students</div>
+			<h2 class="fw-bold mb-0 counter-value" data-target="12040">0</h2>
+			<div class="small text-success mt-2">
+				<i class="bi bi-arrow-up"></i> +12% this month
 			</div>
 		</div>
 	</div>
-	<div class="col-md-3 mb-3 px-2">
-		<div class="card-count p-3">
-			<h3><i class="fas fa-users bg-light-orange"></i></h3>
-			<div class="text-right">
-				Lecturers
-				<h2>1,350</h2>
+	<div class="col-md-3 mb-4 px-2">
+		<div class="stat-card fade-in-up" style="animation-delay: 0.2s;">
+			<div class="stat-icon success">
+				<i class="bi bi-person-badge"></i>
+			</div>
+			<div class="text-muted small fw-semibold text-uppercase mb-1">Lecturers</div>
+			<h2 class="fw-bold mb-0 counter-value" data-target="1350">0</h2>
+			<div class="small text-muted mt-2">
+				<i class="bi bi-dash"></i> No change
 			</div>
 		</div>
 	</div>
-	<div class="col-md-3 mb-3 px-2">
-		<div class="card-count p-3">
-			<h3><i class="fas fa-users bg-light-purple"></i></h3>
-			<div class="text-right">
-				Lab Assistance
-				<h2>500</h2>
+	<div class="col-md-3 mb-4 px-2">
+		<div class="stat-card fade-in-up" style="animation-delay: 0.3s;">
+			<div class="stat-icon warning">
+				<i class="bi bi-journal-bookmark"></i>
+			</div>
+			<div class="text-muted small fw-semibold text-uppercase mb-1">Active Courses</div>
+			<h2 class="fw-bold mb-0 counter-value" data-target="48">0</h2>
+			<div class="small text-success mt-2">
+				<i class="bi bi-arrow-up"></i> +3 new courses
 			</div>
 		</div>
 	</div>
-	<div class="col-md-3 mb-3 px-2">
-		<div class="card-count p-3">
-			<h3><i class="fas fa-users bg-light-red"></i></h3>
-			<div class="text-right">
-				Administrators
-				<h2>125</h2>
+	<div class="col-md-3 mb-4 px-2">
+		<div class="stat-card fade-in-up" style="animation-delay: 0.4s;">
+			<div class="stat-icon info">
+				<i class="bi bi-trophy"></i>
+			</div>
+			<div class="text-muted small fw-semibold text-uppercase mb-1">Avg Pass Rate</div>
+			<h2 class="fw-bold mb-0 counter-value" data-target="87">0</h2><span class="fs-5">%</span>
+			<div class="small text-success mt-2">
+				<i class="bi bi-arrow-up"></i> +5% improvement
 			</div>
 		</div>
 	</div>
-	<div class="col-md-3 mb-3 px-2">
-		<div class="card-count p-3">
-			<h3><i class="fas fa-users bg-light-red"></i></h3>
-			<div class="text-right">
-				Librarian
-				<h2>300</h2>
+</div>
+
+<!-- Feature Cards Section -->
+<div class="row px-3 mb-4">
+	<div class="col-12 mb-3">
+		<h4 class="fw-bold"><i class="bi bi-grid"></i> Platform Features</h4>
+	</div>
+	<div class="col-md-3 mb-4">
+		<div class="feature-card fade-in-up" style="animation-delay: 0.5s;">
+			<div class="feature-icon">
+				<i class="bi bi-bar-chart-fill"></i>
 			</div>
+			<h5 class="fw-bold mb-2">Analytics</h5>
+			<p class="text-muted small">Real-time performance tracking and insights</p>
 		</div>
 	</div>
-	<div class="col-md-3 mb-3 px-2">
-		<div class="card-count p-3">
-			<h3><i class="fas fa-users bg-light-purple"></i></h3>
-			<div class="text-right">
-				Supervisors
-				<h2>660</h2>
+	<div class="col-md-3 mb-4">
+		<div class="feature-card fade-in-up" style="animation-delay: 0.6s;">
+			<div class="feature-icon">
+				<i class="bi bi-people"></i>
 			</div>
+			<h5 class="fw-bold mb-2">Collaboration</h5>
+			<p class="text-muted small">Connect with peers and instructors</p>
 		</div>
 	</div>
-	<div class="col-md-3 mb-3 px-2">
-		<div class="card-count p-3">
-			<h3><i class="fas fa-users bg-light-orange"></i></h3>
-			<div class="text-right pl-2">
-				Office Assistance
-				<h2>1,700</h2>
+	<div class="col-md-3 mb-4">
+		<div class="feature-card fade-in-up" style="animation-delay: 0.7s;">
+			<div class="feature-icon">
+				<i class="bi bi-lightning-charge"></i>
+			</div>
+			<h5 class="fw-bold mb-2">Fast Learning</h5>
+			<p class="text-muted small">Optimized content delivery</p>
+		</div>
+	</div>
+	<div class="col-md-3 mb-4">
+		<div class="feature-card fade-in-up" style="animation-delay: 0.8s;">
+			<div class="feature-icon">
+				<i class="bi bi-shield-check"></i>
+			</div>
+			<h5 class="fw-bold mb-2">Secure</h5>
+			<p class="text-muted small">Enterprise-grade security
 			</div>
 		</div>
 	</div>
