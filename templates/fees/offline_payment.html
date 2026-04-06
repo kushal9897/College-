@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Offline Payment Request - TechMate{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="glass-card p-4">
+                <h3 class="mb-4"><i class="bi bi-building"></i> Offline Payment Request</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label class="form-label">Payment Method</label>
+                        <select name="payment_method" class="form-select form-select-lg" required>
+                            <option value="">Choose...</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Cheque">Cheque</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Amount: <strong>₹{{ amount|floatformat:2 }}</strong></label>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Additional Information (Optional)</label>
+                        <textarea name="remarks" class="form-control" rows="3" placeholder="Cheque number, bank name, etc."></textarea>
+                    </div>
+                    <div class="alert alert-info">
+                        <strong>Note:</strong> Please visit the accounts office to complete payment. Bring this request confirmation.
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit Request</button>
+                        <a href="{% url 'student_fees' %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+.glass-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+</style>
+{% endblock %}

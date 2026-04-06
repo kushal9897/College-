@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Request Submitted - TechMate{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="text-center">
+                <div class="info-icon mb-4">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <h2 class="mb-3">Payment Request Submitted</h2>
+                <p class="lead">Your offline payment request has been recorded</p>
+                <div class="payment-details-card my-4 p-4 bg-light rounded">
+                    <div class="mb-2"><strong>Receipt Number:</strong> {{ payment.receipt_number }}</div>
+                    <div class="mb-2"><strong>Amount:</strong> ₹{{ payment.amount|floatformat:2 }}</div>
+                    <div class="mb-2"><strong>Method:</strong> {{ payment.payment_method }}</div>
+                </div>
+                <div class="alert alert-warning">
+                    <i class="bi bi-info-circle"></i> Please visit the accounts office to complete payment.<br>
+                    <strong>Office Hours:</strong> 9:00 AM - 5:00 PM (Mon-Fri)
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'student_fees' %}" class="btn btn-primary btn-lg">Back to Fees</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+.info-icon {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+.info-icon i {
+    font-size: 3.5rem;
+    color: white;
+}
+</style>
+{% endblock %}

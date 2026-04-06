@@ -67,6 +67,7 @@ PROJECT_APPS = [
     "search.apps.SearchConfig",
     "quiz.apps.QuizConfig",
     "payments.apps.PaymentsConfig",
+    "fees.apps.FeesConfig",
 ]
 
 # Combine all apps
@@ -213,3 +214,10 @@ REST_FRAMEWORK = {
 # Strip payment config
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
+
+# Razorpay payment config (Test Mode - Free)
+# NOTE: Current keys are invalid. Using mock payment gateway for now.
+# Get valid keys from: https://dashboard.razorpay.com/signin
+RAZORPAY_KEY_ID = "rzp_test_Sa2uwuJ2JmzWUn"  # Replace with valid test key
+RAZORPAY_KEY_SECRET = "t9heaTs9LlL7l4VMtznjSbovn"  # Replace with valid test secret
+RAZORPAY_ENABLED = False  # Using mock mode - payment works with UPI/Card/NetBanking simulation

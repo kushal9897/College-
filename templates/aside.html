@@ -31,7 +31,7 @@
 		{% url 'add_score' as ascore %} {% url 'grade_results' as vr %}{% url 'ass_results' as ar %}
 		{% url 'course_registration' as cr %} {% url 'edit_profile' as ep %} {% url 'change_password' as cp %}
 		{% url 'quiz_progress' as qpr %} {% url 'quiz_marking' as qce %} {% url 'user_course_list' as ucl %}
-		{% url 'admin_panel' as admin_p %}
+		{% url 'admin_panel' as admin_p %} {% url 'student_fees' as sf %}
 		<ul>
 			{% if request.user.is_superuser %}
 			<li class="{% if request.path == dash %}active{% endif %}">
@@ -95,6 +95,9 @@
 			{% endif %}
 
 			{% if request.user.is_student %}
+			<li class="{% if request.path == sf %}active{% endif %}">
+				<a href="{% url 'student_fees' %}"><i class="bi bi-credit-card-2-front"></i>My Fees</a>
+			</li>
 			<li class="{% if request.path == qpr %}active{% endif %}">
 				<a href="{% url 'quiz_progress' %}"><i class="fas fa-record-vinyl"></i>Quiz Progress Rec</a>
 			</li>

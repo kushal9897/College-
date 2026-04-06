@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Initiate Payment - TechMate{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Payment Summary Card -->
+            <div class="glass-card p-4 mb-4">
+                <div class="text-center mb-4">
+                    <div class="payment-icon mb-3">
+                        <i class="bi bi-credit-card-2-front" style="font-size: 3rem; color: #6366f1;"></i>
+                    </div>
+                    <h3 class="mb-2">Fee Payment</h3>
+                    <p class="text-muted">Review details and proceed to payment</p>
+                </div>
+
+                <!-- Fee Details -->
+                <div class="payment-details">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td><strong>Fee Type:</strong></td>
+                            <td class="text-end">{{ fee.fee_structure.fee_type }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Academic Year:</strong></td>
+                            <td class="text-end">{{ fee.fee_structure.academic_year }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Amount:</strong></td>
+                            <td class="text-end">₹{{ fee.amount|floatformat:2 }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Paid:</strong></td>
+                            <td class="text-end text-success">₹{{ fee.paid_amount|floatformat:2 }}</td>
+                        </tr>
+                        <tr class="border-top">
+                            <td><strong class="text-danger">Balance Due:</strong></td>
+                            <td class="text-end"><h4 class="text-danger mb-0">₹{{ balance|floatformat:2 }}</h4></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Due Date:</strong></td>
+                            <td class="text-end {% if fee.is_overdue %}text-danger{% endif %}">
+                                {{ fee.due_date|date:"F d, Y" }}
+                                {% if fee.is_overdue %}
+                                <span class="badge bg-danger ms-2">Overdue</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2 mt-4">
+                    <a href="{% url 'payment_method_selection' fee.id %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-arrow-right-circle"></i> Proceed to Payment
+                    </a>
+                    <a href="{% url 'student_fees' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Fees
+                    </a>
+                </div>
+
+                <!-- Info Alert -->
+                <div class="alert alert-info mt-4 mb-0" role="alert">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Note:</strong> You can pay full amount or partial amount. After successful payment, you will receive a receipt that can be downloaded.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.glass-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.payment-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.payment-icon i {
+    color: white !important;
+}
+
+.payment-details {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.table td {
+    padding: 0.75rem 0;
+}
+</style>
+{% endblock %}

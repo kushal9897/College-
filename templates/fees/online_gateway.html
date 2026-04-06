@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Payment Gateway - TechMate{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Gateway Card -->
+            <div class="payment-gateway-card">
+                <div class="gateway-header">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40' viewBox='0 0 120 40'%3E%3Crect fill='%236366f1' width='120' height='40' rx='8'/%3E%3Ctext x='60' y='25' font-family='Arial' font-size='16' font-weight='bold' fill='white' text-anchor='middle'%3ETechPay%3C/text%3E%3C/svg%3E" alt="TechPay Gateway">
+                    <p class="text-muted mb-0 mt-2">Secure Payment Gateway</p>
+                </div>
+
+                <div class="payment-summary p-4 bg-light">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Student:</span>
+                        <strong>{{ student.student.get_full_name }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Fee Type:</span>
+                        <strong>{{ fee.fee_structure.fee_type }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Academic Year:</span>
+                        <strong>{{ fee.fee_structure.academic_year }}</strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <h5 class="mb-0">Amount to Pay:</h5>
+                        <h4 class="mb-0 text-primary">₹{{ amount|floatformat:2 }}</h4>
+                    </div>
+                </div>
+
+                <form method="post" id="paymentForm" class="p-4">
+                    {% csrf_token %}
+                    
+                    <h5 class="mb-3">Select Payment Method</h5>
+                    
+                    <!-- UPI Option -->
+                    <div class="payment-option" onclick="selectPaymentMethod('UPI')">
+                        <input type="radio" name="payment_method" value="UPI" id="upi" required>
+                        <label for="upi">
+                            <div class="d-flex align-items-center">
+                                <div class="option-icon bg-success">📱</div>
+                                <div class="flex-fill">
+                                    <strong>UPI</strong>
+                                    <p class="text-muted mb-0 small">Google Pay, PhonePe, Paytm, etc.</p>
+                                </div>
+                                <i class="bi bi-chevron-right"></i>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Card Option -->
+                    <div class="payment-option" onclick="selectPaymentMethod('Card')">
+                        <input type="radio" name="payment_method" value="Card" id="card" required>
+                        <label for="card">
+                            <div class="d-flex align-items-center">
+                                <div class="option-icon bg-primary">💳</div>
+                                <div class="flex-fill">
+                                    <strong>Credit / Debit Card</strong>
+                                    <p class="text-muted mb-0 small">Visa, Mastercard, RuPay</p>
+                                </div>
+                                <i class="bi bi-chevron-right"></i>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Net Banking Option -->
+                    <div class="payment-option" onclick="selectPaymentMethod('Net Banking')">
+                        <input type="radio" name="payment_method" value="Net Banking" id="netbanking" required>
+                        <label for="netbanking">
+                            <div class="d-flex align-items-center">
+                                <div class="option-icon bg-info">🏦</div>
+                                <div class="flex-fill">
+                                    <strong>Net Banking</strong>
+                                    <p class="text-muted mb-0 small">All major banks supported</p>
+                                </div>
+                                <i class="bi bi-chevron-right"></i>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="alert alert-info mt-3" role="alert">
+                        <i class="bi bi-shield-check me-2"></i>
+                        <strong>Secure Payment:</strong> Your payment information is encrypted and secure.
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-success btn-lg" id="payButton">
+                            <i class="bi bi-lock"></i> Pay ₹{{ amount|floatformat:2 }}
+                        </button>
+                        <a href="{% url 'student_fees' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel Payment
+                        </a>
+                    </div>
+                </form>
+
+                <div class="gateway-footer text-center text-muted">
+                    <small><i class="bi bi-shield-lock"></i> 256-bit SSL Encryption | PCI DSS Compliant</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.payment-gateway-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+}
+
+.gateway-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem;
+    text-align: center;
+    color: white;
+}
+
+.payment-summary {
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.payment-option {
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.payment-option:hover {
+    border-color: #6366f1;
+    background: #f8fafc;
+}
+
+.payment-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.payment-option input[type="radio"]:checked + label {
+    color: #6366f1;
+}
+
+.payment-option.selected {
+    border-color: #6366f1;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+}
+
+.payment-option label {
+    cursor: pointer;
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.option-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+.gateway-footer {
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-top: 1px solid #e5e7eb;
+}
+
+#payButton:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 16px rgba(34, 197, 94, 0.3);
+}
+</style>
+
+<script>
+function selectPaymentMethod(method) {
+    document.querySelectorAll('.payment-option').forEach(option => {
+        option.classList.remove('selected');
+    });
+    event.currentTarget.classList.add('selected');
+    document.querySelector(`input[value="${method}"]`).checked = true;
+}
+
+document.getElementById('paymentForm').addEventListener('submit', function(e) {
+    const button = document.getElementById('payButton');
+    button.disabled = true;
+    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+});
+</script>
+{% endblock %}

@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Razorpay Payment - TechMate{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Razorpay Gateway Card -->
+            <div class="payment-gateway-card">
+                <div class="gateway-header">
+                    <img src="https://razorpay.com/assets/razorpay-glyph.svg" alt="Razorpay" style="height: 40px; filter: brightness(0) invert(1);">
+                    <h4 class="text-white mt-3 mb-2">Secure Payment Gateway</h4>
+                    <p class="text-white mb-0">Powered by Razorpay</p>
+                </div>
+
+                <div class="payment-summary p-4 bg-light">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><i class="bi bi-person"></i> Student:</span>
+                        <strong>{{ student.student.get_full_name }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><i class="bi bi-book"></i> Fee Type:</span>
+                        <strong>{{ fee.fee_structure.fee_type }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><i class="bi bi-calendar"></i> Academic Year:</span>
+                        <strong>{{ fee.fee_structure.academic_year }}</strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Amount to Pay:</h5>
+                        <h3 class="mb-0 text-primary">₹{{ amount|floatformat:2 }}</h3>
+                    </div>
+                </div>
+
+                <div class="p-4">
+                    <div class="alert alert-info mb-4">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Test Mode:</strong> Use Razorpay test cards for demo. No real money will be charged.
+                    </div>
+
+                    <div class="payment-methods mb-4">
+                        <h5 class="mb-3">Supported Payment Methods</h5>
+                        <div class="row text-center">
+                            <div class="col-3">
+                                <div class="method-badge">
+                                    <i class="bi bi-credit-card" style="font-size: 2rem;"></i>
+                                    <p class="small mt-2 mb-0">Cards</p>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="method-badge">
+                                    <i class="bi bi-phone" style="font-size: 2rem;"></i>
+                                    <p class="small mt-2 mb-0">UPI</p>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="method-badge">
+                                    <i class="bi bi-bank" style="font-size: 2rem;"></i>
+                                    <p class="small mt-2 mb-0">Net Banking</p>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="method-badge">
+                                    <i class="bi bi-wallet2" style="font-size: 2rem;"></i>
+                                    <p class="small mt-2 mb-0">Wallets</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="razorpay-form" method="POST" action="{% url 'razorpay_callback' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+                        <input type="hidden" name="razorpay_order_id" id="razorpay_order_id" value="{{ razorpay_order_id }}">
+                        <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+                    </form>
+
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-success btn-lg" id="rzp-button" onclick="openRazorpay()">
+                            <i class="bi bi-lock-fill me-2"></i>Pay ₹{{ amount|floatformat:2 }}
+                        </button>
+                        <a href="{% url 'student_fees' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel Payment
+                        </a>
+                    </div>
+
+                    <!-- Test Cards Info -->
+                    <div class="test-info mt-4 p-3 bg-light rounded">
+                        <h6 class="mb-2"><i class="bi bi-lightbulb"></i> Test Payment Details</h6>
+                        <small class="text-muted">
+                            <strong>Test Card:</strong> 4111 1111 1111 1111<br>
+                            <strong>Expiry:</strong> Any future date<br>
+                            <strong>CVV:</strong> Any 3 digits<br>
+                            <strong>OTP:</strong> Any 6 digits
+                        </small>
+                    </div>
+                </div>
+
+                <div class="gateway-footer text-center">
+                    <small class="text-muted">
+                        <i class="bi bi-shield-check"></i> Secured by Razorpay | 
+                        <i class="bi bi-lock"></i> SSL Encrypted | 
+                        <i class="bi bi-shield-lock"></i> PCI DSS Compliant
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.payment-gateway-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+}
+
+.gateway-header {
+    background: linear-gradient(135deg, #0c4da2 0%, #1a73e8 100%);
+    padding: 2rem;
+    text-align: center;
+}
+
+.payment-summary {
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.method-badge {
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.method-badge:hover {
+    border-color: #6366f1;
+    background: #f8fafc;
+    transform: translateY(-2px);
+}
+
+.gateway-footer {
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-top: 1px solid #e5e7eb;
+}
+
+#rzp-button {
+    transition: all 0.3s ease;
+}
+
+#rzp-button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 16px rgba(34, 197, 94, 0.3);
+}
+
+.test-info {
+    border: 2px dashed #cbd5e1;
+}
+</style>
+
+<!-- Razorpay Checkout Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+function openRazorpay() {
+    var options = {
+        "key": "{{ razorpay_key_id }}",
+        "amount": {{ amount_paise }},
+        "currency": "{{ currency }}",
+        "name": "TechMate - Smart Learning Platform",
+        "description": "{{ fee.fee_structure.fee_type }}",
+        "image": "https://img.icons8.com/fluency/96/000000/student-center.png",
+        "order_id": "{{ razorpay_order_id }}",
+        "handler": function (response){
+            // Payment successful
+            document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+            document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+            document.getElementById('razorpay_signature').value = response.razorpay_signature;
+            document.getElementById('razorpay-form').submit();
+        },
+        "prefill": {
+            "name": "{{ student.student.get_full_name }}",
+            "email": "{{ student.student.email }}",
+            "contact": "{{ student.student.phone|default:'+919999999999' }}"
+        },
+        "notes": {
+            "student_id": "{{ student.student.username }}",
+            "fee_type": "{{ fee.fee_structure.fee_type }}",
+            "academic_year": "{{ fee.fee_structure.academic_year }}"
+        },
+        "theme": {
+            "color": "#6366f1"
+        },
+        "modal": {
+            "ondismiss": function(){
+                console.log('Payment cancelled by user');
+            }
+        }
+    };
+    
+    var rzp = new Razorpay(options);
+    
+    rzp.on('payment.failed', function (response){
+        alert('Payment Failed: ' + response.error.description);
+        console.error('Payment Error:', response.error);
+    });
+    
+    rzp.open();
+}
+
+// Auto-open on load for seamless experience (optional - comment out if you don't want auto-open)
+// window.onload = function() {
+//     setTimeout(openRazorpay, 500);
+// };
+</script>
+{% endblock %}
